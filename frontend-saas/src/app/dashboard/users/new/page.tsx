@@ -31,9 +31,13 @@ export default function NewUserPage() {
 
       window.location.href =
         '/dashboard/users';
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert('Error creando usuario');
+
+      alert(
+        error?.response?.data?.message ||
+          'Error creando usuario',
+      );
     }
   };
 
@@ -55,10 +59,12 @@ export default function NewUserPage() {
           <input
             className="form-input"
             placeholder="Email"
+            type="email"
             value={email}
             onChange={(e) =>
               setEmail(e.target.value)
             }
+            required
           />
 
           <input
@@ -69,7 +75,29 @@ export default function NewUserPage() {
             onChange={(e) =>
               setPassword(e.target.value)
             }
+            required
           />
+
+          <select
+            className="form-input"
+            value={role}
+            onChange={(e) =>
+              setRole(e.target.value)
+            }
+          >
+            <option value="CLIENT">
+              Cliente
+            </option>
+
+            <option value="OPERATOR">
+              Operador
+            </option>
+
+            <option value="ADMIN">
+              Administrador
+            </option>
+          </select>
+
           <button
             type="submit"
             className="primary-button"

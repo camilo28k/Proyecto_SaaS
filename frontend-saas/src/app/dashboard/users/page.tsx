@@ -12,10 +12,30 @@ type User = {
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [role, setRole] = useState('');
+  const [currentEmail, setCurrentEmail] =
+    useState('');
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+  const token = localStorage.getItem('token');
+
+  if (!token) return;
+
+  const payload = JSON.parse(
+    atob(token.split('.')[1]),
+  );
+
+  setRole(payload.role);
+  setCurrentEmail(payload.email);
+
+  if (payload.role === 'CLIENT') {
+    window.location.href =
+      '/dashboard';
+    return;
+  }
+
+  loadUsers();
+}, []);
 
   const loadUsers = async () => {
     try {
@@ -44,6 +64,14 @@ export default function UsersPage() {
     }
   };
 
+  const visibleUsers =
+    role === 'CLIENT'
+      ? users.filter(
+          (user) =>
+            user.email === currentEmail,
+        )
+      : users;
+
   return (
     <div className="page-stack">
       <section className="page-hero">
@@ -61,41 +89,51 @@ export default function UsersPage() {
           </p>
         </div>
 
-        <Link
-          href="/dashboard/users/new"
-          className="primary-button"
-        >
-          Nuevo usuario
-        </Link>
+        {(role === 'ADMIN' ||
+          role === 'OPERATOR') && (
+          <Link
+            href="/dashboard/users/new"
+            className="primary-button"
+          >
+            Nuevo usuario
+          </Link>
+        )}
       </section>
 
       <section className="table-panel">
-
-        {users.map((user) => (
+        {visibleUsers.map((user) => (
           <div
-  key={user.id}
-  className="table-row"
->
-  <span>{user.email}</span>
+            key={user.id}
+            className="table-row"
+          >
+            <span>{user.email}</span>
 
-  <div className="action-buttons">
-    <Link
-      href={`/dashboard/users/${user.id}`}
-      className="edit-button"
-    >
-      Editar
-    </Link>
+            <span>{user.role}</span>
 
-    <button
-      onClick={() =>
-        handleDelete(user.id)
-      }
-      className="delete-button"
-    >
-      Eliminar
-    </button>
-  </div>
-</div>
+            {(role === 'ADMIN' ||
+              role ===
+                'OPERATOR') && (
+              <div className="action-buttons">
+                <Link
+                  href={`/dashboard/users/${user.id}`}
+                  className="edit-button"
+                >
+                  Editar
+                </Link>
+
+                <button
+                  onClick={() =>
+                    handleDelete(
+                      user.id,
+                    )
+                  }
+                  className="delete-button"
+                >
+                  Eliminar
+                </button>
+              </div>
+            )}
+          </div>
         ))}
       </section>
     </div>

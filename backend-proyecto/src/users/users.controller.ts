@@ -12,7 +12,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @Roles('ADMIN')
+  @Roles('ADMIN', 'OPERATOR')
   @UseGuards(JwtAuthGuard, RolesGuard)
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -32,7 +32,8 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @Roles('ADMIN', 'OPERATOR')
+  @UseGuards(JwtAuthGuard,RolesGuard)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }

@@ -13,8 +13,19 @@ type Service = {
 
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([]);
+  const [role, setRole] = useState('');
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      const payload = JSON.parse(
+        atob(token.split('.')[1]),
+      );
+
+      setRole(payload.role);
+    }
+
     loadServices();
   }, []);
 
@@ -72,12 +83,14 @@ export default function ServicesPage() {
           </p>
         </div>
 
-        <Link
-          href="/dashboard/services/new"
-          className="primary-button"
-        >
-          Nuevo servicio
-        </Link>
+        {role !== 'CLIENT' && (
+          <Link
+            href="/dashboard/services/new"
+            className="primary-button"
+          >
+            Nuevo servicio
+          </Link>
+        )}
       </section>
 
       <section className="service-grid">
@@ -98,23 +111,27 @@ export default function ServicesPage() {
               {service.description}
             </p>
 
-            <div className="action-buttons">
-  <Link
-    href={`/dashboard/services/${service.id}`}
-    className="edit-button"
-  >
-    Editar
-  </Link>
+            {role !== 'CLIENT' && (
+              <div className="action-buttons">
+                <Link
+                  href={`/dashboard/services/${service.id}`}
+                  className="edit-button"
+                >
+                  Editar
+                </Link>
 
-  <button
-    onClick={() =>
-      handleDelete(service.id)
-    }
-    className="delete-button"
-  >
-    Eliminar
-  </button>
-</div>
+                <button
+                  onClick={() =>
+                    handleDelete(
+                      service.id,
+                    )
+                  }
+                  className="delete-button"
+                >
+                  Eliminar
+                </button>
+              </div>
+            )}
           </article>
         ))}
       </section>

@@ -16,10 +16,6 @@ export default function HomePage() {
             <Link href="/auth/login" className={styles.btnLogin}>
               Iniciar sesion
             </Link>
-
-            <Link href="/auth/register" className={styles.btnRegister}>
-              Crear cuenta
-            </Link>
           </div>
         </section>
 
