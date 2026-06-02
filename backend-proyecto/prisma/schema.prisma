@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 1. Servicio de Usuarios
+model User {
+  id        String      @id @default(uuid())
+  email     String      @unique 
+  password  String
+  role      Role        @default(CLIENT)
+  operations Operation[]
+  createdAt DateTime    @default(now())
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+  CLIENT
+}
+
+// 2. Servicio de Inventario de Servicios
+model Service {
+  id          String      @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal     @db.Decimal(10, 2)
+  isActive    Boolean     @default(true)
+  operations  Operation[]
+  createdAt   DateTime    @default(now())
+}
+
+// 3. Servicio de Operaciones
+model Operation {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  serviceId     String
+  service       Service  @relation(fields: [serviceId], references: [id])
+  // Valor guardado al momento de la operación para historial
+  finalPrice    Decimal  @db.Decimal(10, 2) 
+  createdAt     DateTime @default(now())
+}
+
+// Nota: El Servicio 4 (Reportes) no requiere tablas nuevas, 
+// se genera mediante consultas SQL agregadas (SUM/GROUP BY) 
+// sobre la tabla Operation.
