@@ -36,7 +36,7 @@ export default function NewUserPage() {
 
       alert(
         error?.response?.data?.message ||
-          'Error creando usuario',
+        'Error creando usuario',
       );
     }
   };

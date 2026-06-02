@@ -19,17 +19,17 @@ export const operationService = {
     return data;
   },
   async delete(id: string) {
-  const { data } = await api.delete(
-    `/operations/${id}`,
-  );
+    const { data } = await api.delete(
+      `/operations/${id}`,
+    );
 
-  return data;
-},
-async getMyOperations() {
-  const { data } = await api.get(
-    '/operations/my',
-  );
+    return data;
+  },
+  async getMyOperations() {
+    const { data } = await api.get(
+      '/operations/my',
+    );
 
-  return data;
-}
+    return data;
+  }
 };

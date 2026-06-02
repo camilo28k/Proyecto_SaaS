@@ -17,25 +17,25 @@ export default function UsersPage() {
     useState('');
 
   useEffect(() => {
-  const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-  if (!token) return;
+    if (!token) return;
 
-  const payload = JSON.parse(
-    atob(token.split('.')[1]),
-  );
+    const payload = JSON.parse(
+      atob(token.split('.')[1]),
+    );
 
-  setRole(payload.role);
-  setCurrentEmail(payload.email);
+    setRole(payload.role);
+    setCurrentEmail(payload.email);
 
-  if (payload.role === 'CLIENT') {
-    window.location.href =
-      '/dashboard';
-    return;
-  }
+    if (payload.role === 'CLIENT') {
+      window.location.href =
+        '/dashboard';
+      return;
+    }
 
-  loadUsers();
-}, []);
+    loadUsers();
+  }, []);
 
   const loadUsers = async () => {
     try {
@@ -67,9 +67,9 @@ export default function UsersPage() {
   const visibleUsers =
     role === 'CLIENT'
       ? users.filter(
-          (user) =>
-            user.email === currentEmail,
-        )
+        (user) =>
+          user.email === currentEmail,
+      )
       : users;
 
   return (
@@ -91,13 +91,13 @@ export default function UsersPage() {
 
         {(role === 'ADMIN' ||
           role === 'OPERATOR') && (
-          <Link
-            href="/dashboard/users/new"
-            className="primary-button"
-          >
-            Nuevo usuario
-          </Link>
-        )}
+            <Link
+              href="/dashboard/users/new"
+              className="primary-button"
+            >
+              Nuevo usuario
+            </Link>
+          )}
       </section>
 
       <section className="table-panel">
@@ -112,27 +112,27 @@ export default function UsersPage() {
 
             {(role === 'ADMIN' ||
               role ===
-                'OPERATOR') && (
-              <div className="action-buttons">
-                <Link
-                  href={`/dashboard/users/${user.id}`}
-                  className="edit-button"
-                >
-                  Editar
-                </Link>
+              'OPERATOR') && (
+                <div className="action-buttons">
+                  <Link
+                    href={`/dashboard/users/${user.id}`}
+                    className="edit-button"
+                  >
+                    Editar
+                  </Link>
 
-                <button
-                  onClick={() =>
-                    handleDelete(
-                      user.id,
-                    )
-                  }
-                  className="delete-button"
-                >
-                  Eliminar
-                </button>
-              </div>
-            )}
+                  <button
+                    onClick={() =>
+                      handleDelete(
+                        user.id,
+                      )
+                    }
+                    className="delete-button"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              )}
           </div>
         ))}
       </section>

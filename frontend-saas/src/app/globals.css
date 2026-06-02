@@ -756,6 +756,7 @@ button {
     display: none;
   }
 }
+
 .form-card {
   max-width: 720px;
   margin: 0 auto;
@@ -807,6 +808,7 @@ button {
   display: flex;
   justify-content: flex-end;
 }
+
 .action-buttons {
   display: flex;
   align-items: center;

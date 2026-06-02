@@ -16,10 +16,10 @@ export default function NewServicePage() {
   ) => {
     try {
       await serviceService.create({
-  name: data.name,
-  description: data.description,
-  price: data.price,
-});
+        name: data.name,
+        description: data.description,
+        price: data.price,
+      });
 
       alert('Servicio creado correctamente');
 

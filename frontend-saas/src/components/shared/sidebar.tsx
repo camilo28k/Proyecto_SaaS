@@ -37,11 +37,11 @@ export function Sidebar() {
 
     ...(role !== 'CLIENT'
       ? [
-          {
-            href: '/dashboard/users',
-            label: 'Usuarios',
-          },
-        ]
+        {
+          href: '/dashboard/users',
+          label: 'Usuarios',
+        },
+      ]
       : []),
 
     {

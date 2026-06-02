@@ -56,52 +56,52 @@ export function ServiceForm({
   };
 
   return (
-  <div className="form-card">
-    <form
-      onSubmit={handleSubmit}
-      className="form-grid"
-    >
-      <label className="form-label">
-        Nombre del servicio
-        <Input
-          className="form-input"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
+    <div className="form-card">
+      <form
+        onSubmit={handleSubmit}
+        className="form-grid"
+      >
+        <label className="form-label">
+          Nombre del servicio
+          <Input
+            className="form-input"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
 
-      <label className="form-label">
-        Descripción
-        <textarea
-          className="form-textarea"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </label>
+        <label className="form-label">
+          Descripción
+          <textarea
+            className="form-textarea"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </label>
 
-      <label className="form-label">
-        Precio
-        <Input
-          className="form-input"
-          type="number"
-          step="0.01"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-        />
-      </label>
+        <label className="form-label">
+          Precio
+          <Input
+            className="form-input"
+            type="number"
+            step="0.01"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
+        </label>
 
-      <div className="form-actions">
-  <button
-    type="submit"
-    className="primary-button"
-    disabled={loading}
-  >
-    {loading
-      ? 'Guardando...'
-      : submitText}
-  </button>
-</div>
-    </form>
-  </div>
-);
+        <div className="form-actions">
+          <button
+            type="submit"
+            className="primary-button"
+            disabled={loading}
+          >
+            {loading
+              ? 'Guardando...'
+              : submitText}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }

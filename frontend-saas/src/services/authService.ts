@@ -12,20 +12,20 @@ export const authService = {
   },
 
   async register(
-  email: string,
-  password: string,
-) {
-  const { data } = await api.post('/auth/register', {
-    email,
-    password,
-  });
+    email: string,
+    password: string,
+  ) {
+    const { data } = await api.post('/auth/register', {
+      email,
+      password,
+    });
 
-  if (data.access_token) {
-    localStorage.setItem('token', data.access_token);
-  }
+    if (data.access_token) {
+      localStorage.setItem('token', data.access_token);
+    }
 
-  return data;
-},
+    return data;
+  },
 
   logout() {
     localStorage.removeItem('token');

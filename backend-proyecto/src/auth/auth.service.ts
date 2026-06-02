@@ -10,7 +10,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async login(loginAuthDto: LoginAuthDto) {
     const { email, password } = loginAuthDto;
@@ -36,42 +36,42 @@ export class AuthService {
     };
   }
   async register(registerAuthDto: RegisterAuthDto) {
-  const { email, password } =
-    registerAuthDto;
+    const { email, password } =
+      registerAuthDto;
 
-  const existingUser =
-    await this.prisma.user.findUnique({
-      where: { email },
-    });
+    const existingUser =
+      await this.prisma.user.findUnique({
+        where: { email },
+      });
 
-  if (existingUser) {
-    throw new ConflictException(
-      'El correo ya está registrado',
-    );
+    if (existingUser) {
+      throw new ConflictException(
+        'El correo ya está registrado',
+      );
+    }
+
+    const hashedPassword =
+      await bcrypt.hash(password, 10);
+
+    const user =
+      await this.prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+        },
+      });
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    return {
+      message:
+        'Usuario registrado correctamente',
+      access_token:
+        this.jwtService.sign(payload),
+    };
   }
-
-  const hashedPassword =
-    await bcrypt.hash(password, 10);
-
-  const user =
-    await this.prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
-
-  const payload = {
-    sub: user.id,
-    email: user.email,
-    role: user.role,
-  };
-
-  return {
-    message:
-      'Usuario registrado correctamente',
-    access_token:
-      this.jwtService.sign(payload),
-  };
-}
 }
