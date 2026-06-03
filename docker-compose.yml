@@ -1,0 +1,43 @@
+services:
+
+  db:
+    image: postgres:15-alpine
+    container_name: saas-db
+    restart: always
+    environment:
+      POSTGRES_USER: SaaS
+      POSTGRES_PASSWORD: SaaS123
+      POSTGRES_DB: portfolio1
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend-proyecto
+    container_name: saas-backend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://SaaS:SaaS123@db:5432/portfolio1?schema=public
+      JWT_SECRET: sncjfbdsbfncjdsbjvbjhfbdvnckcjksmndjcn
+      JWT_EXPIRES_IN: 7d
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend-saas
+    container_name: saas-frontend
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
