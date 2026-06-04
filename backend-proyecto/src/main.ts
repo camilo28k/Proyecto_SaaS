@@ -10,6 +10,8 @@ import {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -18,7 +20,8 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  // Prefijo global para toda la API
+  app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('SaaS Manager API')
@@ -26,7 +29,14 @@ async function bootstrap() {
       'Documentación de la API SaaS Manager',
     )
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'JWT-auth',
+    )
     .build();
 
   const document =
@@ -36,11 +46,20 @@ async function bootstrap() {
     );
 
   SwaggerModule.setup(
-    'api',
+    'docs',
     app,
     document,
   );
 
   await app.listen(3000);
+
+  console.log(
+    'API: http://localhost:3000/api',
+  );
+
+  console.log(
+    'Swagger: http://localhost:3000/docs',
+  );
 }
+
 bootstrap();
